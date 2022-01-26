@@ -27,7 +27,7 @@ gcloud services enable monitoring.googleapis.com
 
 On to the next section to start deployment!
 
-### Deploy the Prometheus service
+## Deploy the Prometheus service
 In this example, we'll walk through using the Managed Collection provided by Google Cloud to scrape metrics
  
 https://cloud.google.com/stackdriver/docs/managed-prometheus/setup-managed
@@ -48,7 +48,7 @@ kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/prometheu
 ```
 
 
-### Deploy the application
+## Deploy the application
 
 Next we'll deploy a really simple application which emits metrics at the /metrics endpoint:
 
@@ -59,6 +59,10 @@ kubectl -n gmp-test apply -f https://raw.githubusercontent.com/kyleabenson/flask
 ```
 https://raw.githubusercontent.com/kyleabenson/flask_telemetry/master/gmp_prom_setup/flask_service.yaml
 ```
+
+We can check that this simple Python Flask app is serving metrics with the following command:
+curl $(kubectl get services -n gmp-test -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}')/metrics
+
 Then we'll tell Prometheus where to begin scraping the metrics from by applying the PodMonitoring file:
 
 ```
@@ -73,9 +77,9 @@ timeout 120 bash -c -- 'while true; do curl $(kubectl get services -n gmp-test -
 
 This will run for 2 minutes, and when done, we can create a visualization of what this looks like!
 
-### Observing the app via metrics
+## Observing the app via metrics
 
-In this last section, we'll quickly use `gcloud` to deploy a custom monitoring dashboard that shows the metrics from this application in a line chart:
+In this last section, we'll quickly use `gcloud` to deploy a custom monitoring dashboard that shows the metrics from this application in a line chart. Be sure to copy the entirety of this code block:
 
 ```
 gcloud monitoring dashboards create --config='''
@@ -137,14 +141,13 @@ gcloud monitoring dashboards create --config='''
 '''
 ```
 
-<walkthrough-menu-navigation sectionId="stackdriver_dashboards"></walkthrough-menu-navigation>
+Once created, navigate to `Monitoring > Dashboards` to see the newly created `Prometheus Dashboard Example` -- click through below to see how to get there.
+<walkthrough-menu-navigation sectionId="MONITORING_SECTION;stackdriver_dashboards"></walkthrough-menu-navigation>
 
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-We're done!
+Congratulations! You've completed this tutorial and have seen the basics of deploying a GKE app with Prometheus Metrics, and creating a Cloud Monitoring Dashboard from it.
 
-Here’s what to do next:
-
-(Follow up content)
+If you'd like to learn more, check out our documentation for [deploying self-managed collection](https://cloud.google.com/stackdriver/docs/managed-prometheus/setup-unmanaged)
