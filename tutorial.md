@@ -149,5 +149,6 @@ Once created, navigate to `Monitoring > Dashboards` to see the newly created `Pr
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
 Congratulations! You've completed this tutorial and have seen the basics of deploying a GKE app with Prometheus Metrics, and creating a Cloud Monitoring Dashboard from it.
+<walkthrough-inline-feedback></walkthrough-inline-feedback>
 
 If you'd like to learn more, check out our documentation for [deploying self-managed collection](https://cloud.google.com/stackdriver/docs/managed-prometheus/setup-unmanaged)
