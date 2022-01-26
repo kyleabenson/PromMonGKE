@@ -10,18 +10,19 @@ Select the project you'd like to work in:
 
 Then, you'll deploy a standard GKE cluster, which will prompt you to authorize and enable the GKE API.
 
-```
+```bash
 gcloud container clusters create gmp-cluster --num-nodes=1
 ```
 
 Next you'll authenticate to the cluster
-```
+
+```bash
 gcloud container clusters get-credentials gmp-cluster
 ```
 
 Last you'll want to make sure the Monitoring API is enabled. This should be done automatically when creating the GKE cluster but you can make certain:
 
-```
+```bash
 gcloud services enable monitoring.googleapis.com
 ```
 
@@ -34,16 +35,16 @@ https://cloud.google.com/stackdriver/docs/managed-prometheus/setup-managed
 
 We'll first create a namespace to do the work in:
 
-```
+```bash
 kubectl create ns gmp-test
 ```
 Then we'll deploy the custom resource defintion and operator to deploy Prometheus within that GKE cluster
 
-```
+```bash
 kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/prometheus-engine/v0.1.1/examples/setup.yaml
 ```
 
-```
+```bash
 kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/prometheus-engine/v0.1.1/examples/operator.yaml
 ```
 
@@ -52,26 +53,28 @@ kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/prometheu
 
 Next we'll deploy a really simple application which emits metrics at the /metrics endpoint:
 
-```
+```bash
 kubectl -n gmp-test apply -f https://raw.githubusercontent.com/kyleabenson/flask_telemetry/master/gmp_prom_setup/flask_deployment.yaml
 ```
 
-```
+```bash
 https://raw.githubusercontent.com/kyleabenson/flask_telemetry/master/gmp_prom_setup/flask_service.yaml
 ```
 
 We can check that this simple Python Flask app is serving metrics with the following command:
+```bash
 curl $(kubectl get services -n gmp-test -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}')/metrics
+```
 
 Then we'll tell Prometheus where to begin scraping the metrics from by applying the PodMonitoring file:
 
-```
+```bash
 kubectl -n gmp-test apply -f https://raw.githubusercontent.com/kyleabenson/flask_telemetry/master/gmp_prom_setup/prom_deploy.yaml
 ```
 
 Before we finish up here, we'll generate some load on the application with a really simple interaction with the app:
 
-```
+```bash
 timeout 120 bash -c -- 'while true; do curl $(kubectl get services -n gmp-test -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}'); sleep $((RANDOM % 4)) ; done'
 ```
 
@@ -81,7 +84,7 @@ This will run for 2 minutes, and when done, we can create a visualization of wha
 
 In this last section, we'll quickly use `gcloud` to deploy a custom monitoring dashboard that shows the metrics from this application in a line chart. Be sure to copy the entirety of this code block:
 
-```
+```bash
 gcloud monitoring dashboards create --config='''
 {
   "category": "CUSTOM",
