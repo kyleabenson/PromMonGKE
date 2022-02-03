@@ -58,7 +58,7 @@ kubectl -n gmp-test apply -f https://raw.githubusercontent.com/kyleabenson/flask
 ```
 
 ```bash
-https://raw.githubusercontent.com/kyleabenson/flask_telemetry/master/gmp_prom_setup/flask_service.yaml
+kubectl -n gmp-test apply -f https://raw.githubusercontent.com/kyleabenson/flask_telemetry/master/gmp_prom_setup/flask_service.yaml
 ```
 
 We can check that this simple Python Flask app is serving metrics with the following command:
