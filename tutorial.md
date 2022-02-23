@@ -33,23 +33,19 @@ In this example, we'll walk through using the Managed Collection provided by Goo
  
 https://cloud.google.com/stackdriver/docs/managed-prometheus/setup-managed
 
+We'll enable the managed service on the cluster on we created before:
+
+```bash
+gcloud beta container clusters update gmp-cluster --enable-managed-prometheus
+```
+
+
+## Deploy the application
 We'll first create a namespace to do the work in:
 
 ```bash
 kubectl create ns gmp-test
 ```
-Then we'll deploy the custom resource defintion and operator to deploy Prometheus within that GKE cluster
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/prometheus-engine/v0.1.1/examples/setup.yaml
-```
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/prometheus-engine/v0.1.1/examples/operator.yaml
-```
-
-
-## Deploy the application
 
 Next we'll deploy a really simple application which emits metrics at the /metrics endpoint:
 
